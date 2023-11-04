@@ -1,6 +1,10 @@
 const User = require('../models/User')
+const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+
+//helpers
 const createUserToken = require('../helpers/create-user-token')
+const getToken = require('../helpers/get-token')
 
 module.exports = class UserController {
     static async register(req, res) {
@@ -101,12 +105,17 @@ module.exports = class UserController {
         //variável que muda de valor
         let currentUser;
 
-        //TOKEN SENDO ENVIADO! AO ACESSAR ESSA ROTA, PQ CONFIGUREI NO POSTMAN!
-        console.log(req.headers.authorization)
-
         //se o correntUser existe ou nao!
         if(req.headers.authorization) {
         //VOU CHAMAR UM HELPER PRA DECODIFICAR O TOKEN, ENCONTRAR O USUARIO PELO ID QUE TA INSERIDO NO TOKEN E RETORNAR PARA O FRONT!
+            //resgatando o token
+            const token = getToken(req)
+            //decodificando ele, o verify me retorna um objeto com todas as propriedades que eu enviei no token!
+            const decoded = jwt.verify(token, 'nossoSecret')
+            //pegando o id que tá lá em decoded e dando uma busca no usuário!
+            currentUser = await User.findById(decoded.id)
+            //removendo a senha do usuário antes de enviá-lo de volta pro front-end! (SEGURANÇA!)
+            currentUser.password = undefined
         } else {
             currentUser = null
         }
