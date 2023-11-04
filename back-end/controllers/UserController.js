@@ -96,4 +96,21 @@ module.exports = class UserController {
         await createUserToken(user, req, res)
     }
     
+    //helper pra pegar o usuário que tá utilizando o sistema atualmente, através do token
+    static async checkUser(req, res) {
+        //variável que muda de valor
+        let currentUser;
+
+        //TOKEN SENDO ENVIADO! AO ACESSAR ESSA ROTA, PQ CONFIGUREI NO POSTMAN!
+        console.log(req.headers.authorization)
+
+        //se o correntUser existe ou nao!
+        if(req.headers.authorization) {
+        //VOU CHAMAR UM HELPER PRA DECODIFICAR O TOKEN, ENCONTRAR O USUARIO PELO ID QUE TA INSERIDO NO TOKEN E RETORNAR PARA O FRONT!
+        } else {
+            currentUser = null
+        }
+
+        res.status(200).send(currentUser)
+    }
 }
