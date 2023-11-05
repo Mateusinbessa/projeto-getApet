@@ -100,7 +100,7 @@ module.exports = class UserController {
         await createUserToken(user, req, res)
     }
     
-    //helper pra pegar o usuário que tá utilizando o sistema atualmente, através do token
+    //Helper pra pegar o usuário que tá utilizando o sistema, através do token!
     static async checkUser(req, res) {
         //variável que muda de valor
         let currentUser;
@@ -121,5 +121,23 @@ module.exports = class UserController {
         }
 
         res.status(200).send(currentUser)
+    }
+
+    static async getUserById(req, res) {
+        const id = req.params.id
+
+        try {
+            //selecionando tudo de usuários, menos a senha!
+            const user = await User.findById(id).select('-password')
+
+            if(!user){
+                res.status(404).json({message: 'Usuário não encontrado!'})
+            }
+
+            res.status(200).json({user})
+        } catch (error) { 
+            console.error(error)
+            res.status(500).json({message: 'Erro interno do servidor!'})
+        }
     }
 }
