@@ -1,3 +1,4 @@
+//Preciso passar REQ como parâmetro porque eu preciso acessar informações específicas da REQ aqui.
 const getToken = (req) => {
     //O console.log que a gente deu no token lá no controller, a gente vê que ele vem com o nome Bearer na frente, vamos tratar.
     const authHeader = req.headers.authorization
